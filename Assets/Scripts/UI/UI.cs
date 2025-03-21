@@ -1,13 +1,18 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UI : MonoBehaviour
 {
+    
+
     [SerializeField] private GameObject characterUI;
     [SerializeField] private GameObject skillTreeUI;
     [SerializeField] private GameObject craftUI;
     [SerializeField] private GameObject optionsUI;
 
     [SerializeField] public Tooltip tooltip;
+   // [SerializeField] public StatTooltip stattooltip;
+
 
     private void Start()
     {

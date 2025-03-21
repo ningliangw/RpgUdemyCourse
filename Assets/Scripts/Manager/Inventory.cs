@@ -226,8 +226,36 @@ public class Inventory : MonoBehaviour
         return inventoryItems.Count < inventoryItemSlots.Length;
     }
 
-    public void CanCraft(ItemDataEquipment craftData, object craftingMaterials)
+    public bool CanCraft(ItemDataEquipment craftData, List<InventoryItem> requiredMaterials)
     {
-        throw new NotImplementedException();
+        List<InventoryItem> materialsToRemove = new List<InventoryItem>();
+        for (int i = 0; i < requiredMaterials.Count; i++)
+        {
+            if (stashDic.TryGetValue(requiredMaterials[i].data, out InventoryItem stashValue))
+            {
+                if (stashValue.stackSize < requiredMaterials[i].stackSize)
+                {
+                    Debug.Log("not enough materials");
+                    return false;
+                }
+                else
+                {
+                    materialsToRemove.Add(stashValue);
+                }
+            }
+            else
+            {
+                Debug.Log("not enough materials");
+                return false;
+            }
+        }
+
+        for (int i = 0; i < materialsToRemove.Count; i++)
+        {
+            RemoveItem(materialsToRemove[i].data);
+        }
+        AddItem(craftData); 
+        Debug.Log("Here is your item" + craftData.name);
+        return true;
     }
 }

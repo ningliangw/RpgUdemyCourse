@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewItemData", menuName = "Data/Equipment")]
@@ -31,7 +32,9 @@ public class ItemDataEquipment : ItemData
     public int fireDamage;
     public int iceDamege;
     public int lightingDamage;
-    public object craftingMaterials;
+
+    [Header("Craft requirements")]
+    public List<InventoryItem> craftingMaterials;
 
     public void ExecuteItemEffect(GameObject from, GameObject to)
     {

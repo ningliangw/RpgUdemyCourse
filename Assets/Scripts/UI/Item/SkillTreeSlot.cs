@@ -1,8 +1,11 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SkillTreeSlot : MonoBehaviour
+public class SkillTreeSlot : MonoBehaviour/*, IPointerEnterHandler, IPointerExitHandler*/
 {
+    private UI ui;
+
     [SerializeField] public bool unlocked;
     [SerializeField] private SkillTreeSlot[] shouldBeUnlocked;
     [SerializeField] private SkillTreeSlot[] shouldBeLocked;
@@ -19,6 +22,8 @@ public class SkillTreeSlot : MonoBehaviour
     private void Start()
     {
         skillImage = GetComponent<Image>();
+        ui = GetComponentInParent<UI>();
+
         skillImage.color = lockedColor;
 
         GetComponent<Button>().onClick.AddListener(() => UnlockSkill());
@@ -39,4 +44,14 @@ public class SkillTreeSlot : MonoBehaviour
         unlocked = true;
         skillImage.color = Color.white;
     }
+
+    /*public void OnPointerEnter(PointerEventData eventData)
+    {
+        ui.skillToolTips.ShowToolTip(skillDescription, skillName);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        ui.skillToolTips.HideToolTip();
+    }*/
 }
