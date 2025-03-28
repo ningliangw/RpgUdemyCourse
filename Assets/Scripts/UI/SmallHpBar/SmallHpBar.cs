@@ -7,31 +7,47 @@ public class SmallHpBar : MonoBehaviour
     private Slider slider;
     private RectTransform rectTransform;
     private FlipSprite flipSprite;
-    private Damageable damageable;
+    public Damageable damageable;
 
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         flipSprite = GetComponentInParent<FlipSprite>();
         slider = GetComponentInChildren<Slider>();
-        damageable = GetComponentInParent<Damageable>();
+        if (damageable == null)
+        {
+            damageable = GetComponentInParent<Damageable>();
+        }
     }
 
     private void OnEnable()
     {
-        flipSprite.OnFlip += Flip;
+        if (flipSprite != null)
+        {
+            flipSprite.OnFlip += Flip;
+        }
         damageable.OnTakeDamage += UpdateHpBar;
+        damageable.OnHeal += UpdateHpBar;
     }
 
     private void OnDisable()
     {
-        flipSprite.OnFlip -= Flip;
-        damageable.OnTakeDamage -= UpdateHpBar;
+        if (flipSprite != null)
+        {
+            flipSprite.OnFlip -= Flip;
+        }
+        damageable.OnHeal -= UpdateHpBar;
     }
 
     private void UpdateHpBar(GameObject object1, GameObject object2)
     {
-        slider.maxValue = damageable.MaxHp.GetValue();
+        slider.maxValue = damageable.GetMaxHealthValue();
+        slider.value = damageable.currentHp;
+    }
+
+    private void UpdateHpBar()
+    {
+        slider.maxValue = damageable.GetMaxHealthValue();
         slider.value = damageable.currentHp;
     }
 

@@ -5,11 +5,15 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewItemData", menuName = "Data/Equipment")]
 public class ItemDataEquipment : ItemData
 {
-    public float ItemCooldown;
-
     public EquipmentType equipmentType;
 
+    [Header("Unique effect")]
+    public float ItemCooldown;
+
     public ItemEffect[] itemEffects;
+
+    [TextArea]
+    public string itemEffectDescription;
 
     [Header("Major Stats")]
     public int strength;
@@ -108,6 +112,12 @@ public class ItemDataEquipment : ItemData
         AddItemDescription(fireDamage, "FireDamage");
         AddItemDescription(iceDamege, "IceDamege");
         AddItemDescription(lightingDamage, "LightingDamage");
+
+        if (itemEffectDescription.Length > 0)
+        {
+            sb.AppendLine();
+            sb.Append(itemEffectDescription);
+        }
 
         return sb.ToString();
     }

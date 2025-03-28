@@ -1,12 +1,18 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class StatsSlot : MonoBehaviour
+public class StatsSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    private UI ui;
+
     [SerializeField] private string statName;
     [SerializeField] private StatType statType;
     [SerializeField] private TextMeshProUGUI statNameText;
     [SerializeField] private TextMeshProUGUI statValueText;
+
+    [TextArea]
+    [SerializeField] private string statDescription;
 
     private void OnValidate()
     {
@@ -17,6 +23,8 @@ public class StatsSlot : MonoBehaviour
     private void Start()
     {
         UpdateStatValue();
+
+        ui = GetComponentInParent<UI>();
     }
 
     public void UpdateStatValue()
@@ -44,5 +52,15 @@ public class StatsSlot : MonoBehaviour
 
         if (statType == StatType.MagicRes)
             statValueText.text = (playerStat.MagicResistance.GetValue() + (playerStat.Int.GetValue() * 3)).ToString();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        ui.statTooltip.ShowstatToolTip(statDescription);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        ui.statTooltip.HideStatToolTip();
     }
 }

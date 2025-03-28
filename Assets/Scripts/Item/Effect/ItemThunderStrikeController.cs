@@ -7,7 +7,7 @@ public class ItemThunderStrikeController : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             var player = PlayerManager.Instance.player;
-            other.GetComponent<Damageable>().TakeDamage(player, false, false);
+            other.GetComponent<Damageable>().TakeDamage(player, 1f, false, false);
             Invoke(nameof(DestroyMe), 0.5f);
             GetComponent<CircleCollider2D>().enabled = false;
         }

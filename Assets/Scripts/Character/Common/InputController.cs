@@ -45,10 +45,23 @@ public class InputController : MonoBehaviour
         yAxis = movement.y;
 
         isJumpDown = jumpInput.triggered;
-        isDashDown = dashInput.triggered;
+        if (SkillManager.Instance.Dash.dashUnlocked)
+        {
+            isDashDown = dashInput.triggered;
+
+        }
+
         isAttackDown = attackInput.triggered;
-        isCounterDown = counterInput.triggered;
-        isAimSwordDown = aimSwordInput.triggered;
+
+        if (SkillManager.Instance.parry.parryUnlocked)
+        {
+            isCounterDown = counterInput.triggered;
+        }
+        if (SkillManager.Instance.Sword.swordUnlocked)
+        {
+            isAimSwordDown = aimSwordInput.triggered;
+        }
+
         isJumpPressed = jumpInput.IsPressed();
         isDashPressed = dashInput.IsPressed();
         isAttackPressed = attackInput.IsPressed();

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CrystalSkill : Skill
 {
@@ -7,7 +9,12 @@ public class CrystalSkill : Skill
     [SerializeField] private float duration;
 
     [Header("Crystal Mirage")]
+    [SerializeField] private SkillTreeSlot unlockCloneInstaedButton;
     [SerializeField] private bool cloneInsteadOfCrystal;
+
+    [Header("Crystal simple")]
+    [SerializeField] private SkillTreeSlot unlockCrystalButton;
+    public bool crystalUnlocked { get; private set; }
 
     [Header("Growing Crystal")]
     [SerializeField] private Vector2 maxSize;
@@ -15,13 +22,16 @@ public class CrystalSkill : Skill
 
 
     [Header("Explosive Crystal")]
+    [SerializeField] private SkillTreeSlot unlockExplosiveButton;
     [SerializeField] private bool canExplode;
 
     [Header("Moving Crystal")]
+    [SerializeField] private SkillTreeSlot unlockMovingCrystalButton;
     [SerializeField] private bool canMove;
     [SerializeField] private float moveSpeed;
 
     [Header("Multi Stacking Crystal")]
+    [SerializeField] private SkillTreeSlot unlockMultiStackButton;
     [SerializeField] private bool canUseMultiStacks;
     [SerializeField] private int amountOfStacks;
     [SerializeField] private float multiStackCooldown;
@@ -29,6 +39,57 @@ public class CrystalSkill : Skill
     [SerializeField] private List<GameObject> crystalLeft;
 
     private GameObject currentCrystal;
+
+    protected override void Start()
+    {
+        base.Start();
+
+        unlockCrystalButton.GetComponent<Button>().onClick.AddListener(UnlockCrystal);
+        unlockCloneInstaedButton.GetComponent<Button>().onClick.AddListener(UnlockCrystalMirage);
+        unlockExplosiveButton.GetComponent<Button>().onClick.AddListener(UnlockExplosiveCrystal);
+        unlockMovingCrystalButton.GetComponent<Button>().onClick.AddListener(UnlockMovingCrystal);
+        unlockMultiStackButton.GetComponent<Button>().onClick.AddListener(UnlockMultiStack);
+    }
+
+    # region Unlock skill region
+    protected override void CheckUnlock()
+    {
+        UnlockCrystal();
+        UnlockCrystalMirage();
+        UnlockExplosiveCrystal();
+        UnlockMovingCrystal();
+        UnlockMultiStack();
+    }
+    private void UnlockCrystal()
+    {
+        if (unlockCrystalButton.unlocked) 
+            crystalUnlocked = true;
+    }
+
+    private void UnlockCrystalMirage()
+    {
+        if (unlockCloneInstaedButton.unlocked)
+            cloneInsteadOfCrystal = true;
+    }
+
+    private void UnlockExplosiveCrystal()
+    {
+        if (unlockExplosiveButton.unlocked)
+            canExplode = true;
+    }
+
+    private void UnlockMovingCrystal()
+    {
+        if (unlockMovingCrystalButton.unlocked)
+            canMove = true;
+    }
+
+    private void UnlockMultiStack()
+    {
+        if (unlockMovingCrystalButton.unlocked)
+            canUseMultiStacks = true;
+    }
+    #endregion
 
     protected override void SkillFunction()
     {
@@ -95,6 +156,8 @@ public class CrystalSkill : Skill
 
     private GameObject CreateCrystal(GameObject crystalToSpawn)
     {
+        Debug.Log(crystalToSpawn);
+        Debug.Log(player);
         var pos = player.transform.position + new Vector3(0, 1);
         var parent = PlayerManager.Instance.fx.transform;
         var newCrystal = Instantiate(crystalToSpawn, pos, Quaternion.identity, parent);

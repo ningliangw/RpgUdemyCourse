@@ -10,20 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27be0d93a3d5f1344a18c65312813aa2, type: 3}
-  m_Name: ThunderClaw
+  m_Name: ArmorFlask
   m_EditorClassIdentifier: 
   itemType: 1
-  itemName: ThunderClaw
-  icon: {fileID: 367297872, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
+  itemName: ArmorFlash
+  icon: {fileID: -165920498, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
   dropChance: 0
-  equipmentType: 0
+  ItemCooldown: 15
+  equipmentType: 3
   itemEffects:
-  - {fileID: 11400000, guid: 73a02aba099ce224c8c759ab8ec9e96e, type: 2}
+  - {fileID: 11400000, guid: bc05e923123eaa940a68aa5097d16018, type: 2}
+  - {fileID: 11400000, guid: 21156d3db2d323746a2c2969895ca96a, type: 2}
   strength: 0
   agility: 0
   intelligence: 0
   vitality: 0
-  damage: 10
+  damage: 0
   critChance: 0
   critPower: 0
   health: 0
@@ -32,4 +34,4 @@ MonoBehaviour:
   magicResistance: 0
   fireDamage: 0
   iceDamege: 0
-  lightingDamage: 5
+  lightingDamage: 0

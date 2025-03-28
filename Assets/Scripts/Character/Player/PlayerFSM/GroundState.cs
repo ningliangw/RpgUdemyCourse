@@ -15,8 +15,9 @@ public class GroundState : PlayerState
     {
         base.Update();
 
-        if (UnityEngine.Input.GetKeyDown(KeyCode.F))
+        if (UnityEngine.Input.GetKeyDown(KeyCode.F) && SkillManager.Instance.Blackhole.blackholeUnlocked)
         {
+            Debug.Log("ºÚ¶´½âæiÇé›r£º" + SkillManager.Instance.Blackhole.blackholeUnlocked);
             Fsm.SwitchState(Character.BlackholeState);
             return;
         }

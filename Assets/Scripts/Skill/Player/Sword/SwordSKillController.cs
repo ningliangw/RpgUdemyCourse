@@ -210,11 +210,19 @@ public class SwordSKillController : MonoBehaviour
 
     private void TakeDamage(Collider2D other, bool needFreeze)
     {
+
         if (!other.TryGetComponent(out Damageable damageable)) return;
         damageable.TakeDamage(player.gameObject);
         if (!needFreeze) return;
         if (!other.TryGetComponent(out Enemy enemy)) return;
-        enemy.FreezeTimeForSeconds(0.7f);
+
+        Damageable enemyStats = enemy.GetComponent<Damageable>();
+
+        if (SkillManager.Instance.Sword.timeStopUnlocked)
+            enemy.FreezeTimeForSeconds(0.7f);
+
+        if (SkillManager.Instance.Sword.vulnerableUnlocked)
+            enemyStats.MakeVulnerableFor(0.7f);
     }
 
     private void GetBounceEnemy()

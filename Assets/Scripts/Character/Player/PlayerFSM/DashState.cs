@@ -10,7 +10,7 @@ public class DashState : PlayerState
 
         StateTimer = Character.dashDuration;
 
-        SkillManager.Instance.Clone.CreateCloneOnDashStart(Character.transform);
+        SkillManager.Instance.Dash.CloneOnDash(Character.transform);
     }
     public override void Update()
     {
@@ -33,6 +33,6 @@ public class DashState : PlayerState
     {
         base.Exit(newState);
 
-        SkillManager.Instance.Clone.CreateCloneOnDashOver(Character.transform);
+        SkillManager.Instance.Dash.CloneOnArrival(Character.transform);
     }
 }

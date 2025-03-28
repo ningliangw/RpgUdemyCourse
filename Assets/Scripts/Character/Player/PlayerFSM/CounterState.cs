@@ -36,10 +36,11 @@ public class CounterState : PlayerState
 
             StateTimer = 10;
             Anim.SetBool("CounterSuccess", true);
+            SkillManager.Instance.parry.CanUseSkill();
 
             if (canCreateClone)
             {
-                SkillManager.Instance.Clone.CreateCloneOnCounterAttack(hit.transform);
+                SkillManager.Instance.parry.MakeMirageOnParry(hit.transform);
                 canCreateClone = false;
             }
 

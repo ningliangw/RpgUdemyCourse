@@ -9,11 +9,18 @@ public abstract class Skill : MonoBehaviour
     protected virtual void Start()
     {
         player = PlayerManager.Instance.player.GetComponent<Player>();
+
+        CheckUnlock();
     }
 
     protected virtual void Update()
     {
         cooldownTimer -= Time.deltaTime;
+    }
+
+    protected virtual void CheckUnlock()
+    {
+
     }
 
     public bool CanUseSkill()

@@ -50,14 +50,16 @@ public abstract class Damageable : MonoBehaviour
     private float shockedTimer;
 
     private bool isDead;
+    private bool isVulnerable;
 
     public event Action<GameObject, GameObject> OnTakeDamage;
+    public event Action OnHeal;
     private FlashFX flashFX;
     private Character character;
 
     protected virtual void Start()
     {
-        currentHp = MaxHp.GetValue();
+        currentHp = GetMaxHealthValue();
         CritPower.SetDefaultValue(150);
         flashFX = GetComponent<FlashFX>();
         character = GetComponent<Character>();
@@ -86,7 +88,8 @@ public abstract class Damageable : MonoBehaviour
 
         if (IsIgnited && igniteDamageTimer < 0)
         {
-            currentHp -= igniteDamage;
+            DecreaseHealthBy(igniteDamage);
+
             if (currentHp <= 0)
             {
                 Die();
@@ -95,14 +98,29 @@ public abstract class Damageable : MonoBehaviour
         }
     }
 
-    public virtual void TakeDamage(GameObject from, bool isMagic = false, bool canEffect = true)
+    public void MakeVulnerableFor(float duration) => StartCoroutine(VulnerableCorutine(duration));
+
+    private IEnumerator VulnerableCorutine(float duartion)
+    {
+        isVulnerable = true;
+        yield return new WaitForSeconds(duartion);
+        isVulnerable = false;
+    }
+
+    public virtual void TakeDamage(GameObject from, float _multiplier = 1f, bool isMagic = false, bool canEffect = true)
     {
         if (isDead) return;
 
         var damageFrom = from.GetComponent<Damageable>();
 
         var damage = isMagic ? CalculateMagicDamage(damageFrom, this) : CalculateDamage(damageFrom, this);
-        currentHp -= damage;
+
+        if (_multiplier > 0)
+        {
+            damage = Mathf.RoundToInt(damage * _multiplier);
+        }
+
+        DecreaseHealthBy(damage);
 
         if (from.CompareTag("Player") && canEffect)
         {
@@ -173,11 +191,20 @@ public abstract class Damageable : MonoBehaviour
         }
     }
 
+    public virtual void OnEvasion()
+    {
+        SkillManager.Instance.dodge.CreateMirageOnDodge();
+    }
+
     private int CalculateDamage(Damageable from, Damageable to)
     {
         var finalEvasion = to.Evasion.GetValue() + to.Agi.GetValue();
         if (from.IsShocked) finalEvasion += 20;
-        if (UnityEngine.Random.Range(0, 100) <= finalEvasion) return 0;
+        if (UnityEngine.Random.Range(0, 100) <= finalEvasion)
+        {
+            to.OnEvasion();
+            return 0;
+        }
 
         var finalDamage = from.Damage.GetValue() + from.Str.GetValue() - to.Vit.GetValue();
 
@@ -214,6 +241,11 @@ public abstract class Damageable : MonoBehaviour
         finalMagicalDamage = Mathf.Clamp(finalMagicalDamage, 1, int.MaxValue);
 
         return finalMagicalDamage;
+    }
+
+    public int GetMaxHealthValue()
+    {
+        return MaxHp.GetValue() + Vit.GetValue() * 5;
     }
 
     public void ApplyAilments(bool ignite, bool chill, bool shock)
@@ -277,8 +309,16 @@ public abstract class Damageable : MonoBehaviour
     public virtual void IncreaseHealthBy(int amount)
     {
         currentHp += amount;
-        if (currentHp > MaxHp.GetValue())
-            currentHp = MaxHp.GetValue();
+        if (currentHp > GetMaxHealthValue())
+            currentHp = GetMaxHealthValue();
+        OnHeal?.Invoke();
+    }
+
+    protected virtual void DecreaseHealthBy(int damage)
+    {
+        if (isVulnerable)
+            damage = Mathf.RoundToInt(damage * 1.1f);
+        currentHp -= damage;
     }
 
     public virtual void IncreaseStatBy(int modifier, float duration, Stats statsToModify)

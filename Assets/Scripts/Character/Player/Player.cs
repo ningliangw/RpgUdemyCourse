@@ -103,7 +103,7 @@ public class Player : Character
     {
         base.Update();
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q) && SkillManager.Instance.Crystal.crystalUnlocked)
             SkillManager.Instance.Crystal.CanUseSkill();
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -138,4 +138,5 @@ public class Player : Character
             dashSpeed = defaultDashSpeed;
         }
     }
+
 }

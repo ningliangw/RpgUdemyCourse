@@ -121,7 +121,7 @@ public class CrystalSkillController : MonoBehaviour
             var equipedAmulet = Inventory.Instance.GetEquipmentByType(EquipmentType.Amulet);
             if (equipedAmulet != null)
                 equipedAmulet.ExecuteItemEffect(player.gameObject, hit.gameObject);
-            damageable.TakeDamage(player.gameObject, true);
+            damageable.TakeDamage(player.gameObject, 1f, true);
         }
     }
 

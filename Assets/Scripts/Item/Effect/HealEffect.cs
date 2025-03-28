@@ -8,6 +8,7 @@ public class HealEffect : ItemEffect
 
     public override void ExecuteEffect(GameObject from, GameObject to)
     {
+        Debug.Log("÷Œ”˙’º±»:" + healPercent);
         var stats = PlayerManager.Instance.player.GetComponent<Damageable>();
         int healAmount = Mathf.RoundToInt(stats.MaxHp.GetValue() * healPercent);
         stats.IncreaseHealthBy(healAmount);

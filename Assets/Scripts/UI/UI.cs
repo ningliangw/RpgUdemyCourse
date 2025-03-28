@@ -3,20 +3,28 @@ using UnityEngine.EventSystems;
 
 public class UI : MonoBehaviour
 {
-    
+    public FadeScreen fadeScreen;
+    [Space]
 
     [SerializeField] private GameObject characterUI;
     [SerializeField] private GameObject skillTreeUI;
     [SerializeField] private GameObject craftUI;
     [SerializeField] private GameObject optionsUI;
+    [SerializeField] private GameObject inGameUI;
 
-    [SerializeField] public Tooltip tooltip;
-   // [SerializeField] public StatTooltip stattooltip;
+    public Tooltip tooltip;
+    public StatTooltip statTooltip;
+    public SkillTooltip skillToolTip;
+    public CraftWindow craftWindow;
 
+    private void Awake()
+    {
+        SwitchTo(skillTreeUI);
+    }
 
     private void Start()
     {
-        SwitchTo(null);
+        SwitchTo(inGameUI);
     }
 
     private void Update()
@@ -50,7 +58,10 @@ public class UI : MonoBehaviour
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).gameObject.SetActive(false);
+            bool fadeScreen = transform.GetChild(i).GetComponent<FadeScreen>() != null;
+            
+            if (!fadeScreen)
+                transform.GetChild(i).gameObject.SetActive(false);
         }
         menu?.SetActive(true);
     }
@@ -60,8 +71,20 @@ public class UI : MonoBehaviour
         if (menu && menu.activeSelf)
         {
             menu.SetActive(false);
+            CheckForInGameUI();
             return;
         }
         SwitchTo(menu);
+    }
+
+    private void CheckForInGameUI()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            if (transform.GetChild(i).gameObject.activeSelf)
+                return;
+        }
+
+        SwitchTo(inGameUI);
     }
 }

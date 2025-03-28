@@ -10,9 +10,9 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
     [SerializeField] protected Image itemImage;
     [SerializeField] protected TextMeshProUGUI itemText;
 
-    private UI ui;
+    protected UI ui;
 
-    private void Start()
+    protected virtual void Start()
     {
         ui = GetComponentInParent<UI>();
     }
@@ -22,6 +22,8 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
         if (item == null) return;
         if (item.data.itemType != ItemType.Equipment) return;
         Inventory.Instance.EquipItem(item.data);
+
+        ui.tooltip.HideTooltip();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -29,6 +31,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
         if (item == null) return;
         var equipment = item.data as ItemDataEquipment;
         if (equipment == null) return;
+
         ui.tooltip.ShowTooltip(equipment);
     }
 

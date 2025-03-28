@@ -16,6 +16,7 @@ public class DeadState : PlayerState
     public override void Enter(IState lastState)
     {
         base.Enter(lastState);
+
         Character.StartCoroutine(Dissolve());
         Task.Run(async () =>
         {
@@ -49,5 +50,7 @@ public class DeadState : PlayerState
             Character.Sr.material.SetFloat("_DissoiveAmount", counter);
             yield return new WaitForSeconds(refreshRate);
         }
+
+        GameObject.Find("Canvas").GetComponent<UI>().fadeScreen.FadeOut();
     }
 }
